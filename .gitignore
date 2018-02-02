@@ -6,6 +6,9 @@
 *.user
 *.sln.docstates
 
+# Visual Studio Folder
+.vs
+
 # Build results
 
 [Dd]ebug/
@@ -63,6 +66,7 @@ ipch/
 # ReSharper is a .NET coding add-in
 _ReSharper*/
 *.[Rr]e[Ss]harper
+*.DotSettings
 *.DotSettings.user
 
 # Click-Once directory
@@ -74,9 +78,7 @@ publish/
 *.azurePubxml
 
 # NuGet Packages Directory
-## TODO: If you have NuGet Package Restore enabled, uncomment the next line
 packages/
-## TODO: If the tool you use requires repositories.config, also uncomment the next line
 !packages/repositories.config
 
 # Windows Azure Build Output
