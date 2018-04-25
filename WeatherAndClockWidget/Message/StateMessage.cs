@@ -4,6 +4,11 @@ namespace WeatherAndClockWidget.Message
 {
     public class StateMessage : MessageBase
     {
-        public bool IsUnlocked { get; set; }
+        public bool IsUnlocked { get; }
+
+        public StateMessage(bool isUnlocked)
+        {
+            IsUnlocked = isUnlocked;
+        }
     }
 }

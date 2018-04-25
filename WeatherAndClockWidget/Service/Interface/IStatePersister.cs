@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
-using WeatherAndClockWidget.Model;
+﻿using WeatherAndClockWidget.Model;
 
 namespace WeatherAndClockWidget.Service.Interface
 {
     public interface IStatePersister
     {
-        Task SaveState(State s);
-        Task<State> GetSavedState();
+        void SaveState(State state);
+        State GetSavedState();
     }
 }

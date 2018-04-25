@@ -2,8 +2,8 @@
 {
     public class Location
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double Latitude { get; }
+        public double Longitude { get; }
 
         public Location(string latitude, string longitude)
         {

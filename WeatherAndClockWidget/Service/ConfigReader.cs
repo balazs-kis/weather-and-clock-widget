@@ -6,35 +6,21 @@ namespace WeatherAndClockWidget.Service
 {
     public class ConfigReader : IConfigReader
     {
-        public TimeSpan WeatherUpdatePeriod
-        {
-            get
-            {
-                var conf = ConfigurationManager.AppSettings["WeatherUpdatePeriod"];
-                var isParsed = int.TryParse(conf, out var periodInMinutes);
+        public string WeatherApiKey =>
+            ConfigurationManager.AppSettings["WeatherApiKey"];
 
-                // Cannot parse value: use the default 15 minutes.
-                if (!isParsed)
-                {
-                    return TimeSpan.FromMinutes(15);
-                }
+        public TimeSpan WeatherUpdatePeriod =>
+            ConfigurationManager
+                .AppSettings["WeatherUpdatePeriod"]
+                .Map(s => ParseWithDefault(s, 15))
+                .When(periodInMinutes => periodInMinutes > 120, periodInMinutes => 120)
+                .When(periodInMinutes => periodInMinutes < 5, periodInMinutes => 5)
+                .Map(periodInMinutes => TimeSpan.FromMinutes(periodInMinutes));
 
-                // The maximum of the update period: 2 hours.
-                if (periodInMinutes > 120)
-                {
-                    periodInMinutes = 120;
-                }
 
-                // The minimum of the update period: 5 minutes.
-                if (periodInMinutes < 5)
-                {
-                    periodInMinutes = 5;
-                }
-
-                return TimeSpan.FromMinutes(periodInMinutes);
-            }
-        }
-
-        public string WeatherApiKey => ConfigurationManager.AppSettings["WeatherApiKey"];
+        private static int ParseWithDefault(string toParse, int defaultValue = 0) =>
+            int.TryParse(toParse, out var periodInMinutes)
+                ? periodInMinutes
+                : defaultValue;
     }
 }

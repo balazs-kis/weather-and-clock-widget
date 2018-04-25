@@ -1,25 +1,17 @@
-﻿using System.Threading.Tasks;
-using WeatherAndClockWidget.Model;
+﻿using WeatherAndClockWidget.Model;
 using WeatherAndClockWidget.Service.Interface;
 
 namespace WeatherAndClockWidget.Service.Mock
 {
     public class StatePersisterMock : IStatePersister
     {
-        public Task SaveState(State s)
+        public void SaveState(State s)
         {
-            return Task.FromResult(true);
         }
 
-        public Task<State> GetSavedState()
+        public State GetSavedState()
         {
-            return Task.FromResult(new State
-            {
-                IsLocked = false,
-                IsVisible = true,
-                Left = 10,
-                Top = 10
-            });
+            return State.Default;
         }
     }
 }

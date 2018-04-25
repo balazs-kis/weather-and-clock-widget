@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using WeatherAndClockWidget.Model;
 using WeatherAndClockWidget.Service.Interface;
@@ -16,47 +17,27 @@ namespace WeatherAndClockWidget.Service
             _weatherApiUrl = $"http://api.openweathermap.org/data/2.5/weather?{CoordinatesPlaceholder}&appid={configReader.WeatherApiKey}";
         }
 
-        public WeatherData GetCurrentWeather()
-        {
-            try
-            {
-                WeatherData result;
+        public WeatherData GetCurrentWeather() =>
+            Disposable
+                .Using(CreateWebClient, client => client.DownloadString(LocationApiUrl))
+                .Map(JObject.Parse)
+                .Map(GetLocationFromJson)
+                .Map(location => _weatherApiUrl.Replace(CoordinatesPlaceholder, $"lat={location.Latitude:F4}&lon={location.Longitude:F4}"))
+                .Using(CreateWebClient, (client, uri) => client.DownloadString(uri))
+                .Map(JObject.Parse)
+                .Map(GetWeatherDataFromJson);
 
-                using (var wc = new WebClient())
-                {
-                    var location = GetLocation(wc);
-                    result = GetWeatherData(wc, location);
-                }
+        private static WebClient CreateWebClient() =>
+            new WebClient();
 
-                return result;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        private static Location GetLocationFromJson(JObject o) =>
+            new Location(o["latitude"].ToString(), o["longitude"].ToString());
 
-        private Location GetLocation(WebClient wc)
-        {
-            var response = JObject.Parse(wc.DownloadString(LocationApiUrl));
-
-            var latitude = response["latitude"].ToString();
-            var longitude = response["longitude"].ToString();
-
-            return new Location(latitude, longitude);
-        }
-
-        private WeatherData GetWeatherData(WebClient wc, Location l)
-        {
-            var weatherApiUrl = _weatherApiUrl.Replace(CoordinatesPlaceholder, $"lat={l.Latitude:F4}&lon={l.Longitude:F4}");
-            var resonse = JObject.Parse(wc.DownloadString(weatherApiUrl));
-
-            var tempString = resonse["main"]["temp"].ToString();
-            var conditionString = resonse["weather"][0]["main"].ToString();
-            var humString = resonse["main"]["humidity"].ToString();
-            var windString = resonse["wind"]["speed"].ToString();
-
-            return new WeatherData(tempString, conditionString, humString, windString);
-        }
+        private static WeatherData GetWeatherDataFromJson(JObject o) =>
+            new WeatherData(
+                o["main"]["temp"].ToString(),
+                o["weather"][0]["main"].ToString(),
+                o["main"]["humidity"].ToString(),
+                o["wind"]["speed"].ToString());
     }
 }

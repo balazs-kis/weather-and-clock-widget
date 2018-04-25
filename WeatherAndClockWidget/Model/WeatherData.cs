@@ -4,10 +4,10 @@ namespace WeatherAndClockWidget.Model
 {
     public class WeatherData
     {
-        public double Temperature { get; set; }
-        public double Humidity { get; set; }
-        public double Wind { get; set; }
-        public string Conditions { get; set; }
+        public double Temperature { get; }
+        public double Humidity { get; }
+        public double Wind { get; }
+        public string Conditions { get; }
 
         public WeatherData(string temp, string condition, string hum, string wind)
         {

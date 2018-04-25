@@ -31,7 +31,7 @@ namespace WeatherAndClockWidget.ViewModel
             IConfigReader configReader)
         {
             _downloader = weatherDataDownloader;
-            var savedState = statePersister.GetSavedState().GetAwaiter().GetResult();
+            var savedState = statePersister.GetSavedState();
 
             IsUnlocked = savedState == null ? true : !savedState.IsLocked;
             Messenger.Default.Register<StateMessage>(this, m => IsUnlocked = m.IsUnlocked);

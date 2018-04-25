@@ -30,7 +30,7 @@ namespace WeatherAndClockWidget
             _transitionTime = TimeSpan.FromMilliseconds(700);
             _statePersister = new StatePersister();
 
-            var savedState = _statePersister.GetSavedState().GetAwaiter().GetResult();
+            var savedState = _statePersister.GetSavedState();
 
             SetInitialState(savedState);
             CreateTrayIcon(savedState);
@@ -50,7 +50,7 @@ namespace WeatherAndClockWidget
             var mi = (MenuItem)sender;
 
             mi.Checked = !mi.Checked;
-            Messenger.Default.Send(new StateMessage { IsUnlocked = !mi.Checked });
+            Messenger.Default.Send(new StateMessage(!mi.Checked));
 
             SaveState();
         }
@@ -84,30 +84,17 @@ namespace WeatherAndClockWidget
         private void SaveState()
         {
             _statePersister.SaveState(
-                new State
-                {
-                    IsLocked = _lockMenuItem.Checked,
-                    IsVisible = _showMenuItem.Checked,
-                    Left = Left,
-                    Top = Top
-                });
+                new State(_lockMenuItem.Checked, _showMenuItem.Checked, Left, Top));
         }
 
 
         private void SetInitialState(State s)
         {
-            if (s == null)
-            {
-                Visibility = Visibility.Visible;
-            }
-            else
-            {
-                Visibility = s.IsVisible ? Visibility.Visible : Visibility.Hidden;
+            Visibility = s.IsVisible ? Visibility.Visible : Visibility.Hidden;
 
-                WindowStartupLocation = WindowStartupLocation.Manual;
-                Left = s.Left;
-                Top = s.Top;
-            }
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            Left = s.Left;
+            Top = s.Top;
         }
 
         private void CreateTrayIcon(State s)
@@ -115,13 +102,13 @@ namespace WeatherAndClockWidget
             _lockMenuItem =
                 new MenuItem(Properties.Resources.LockText, TrayIcon_OnLockSwitched)
                 {
-                    Checked = s != null && s.IsLocked
+                    Checked = s.IsLocked
                 };
 
             _showMenuItem =
                 new MenuItem(Properties.Resources.ShowText, TrayIcon_OnHideSwitched)
                 {
-                    Checked = s == null || s.IsVisible
+                    Checked = s.IsVisible
                 };
 
             var notifyIcon = new NotifyIcon
