@@ -85,10 +85,13 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Model\State.cs" />
     <Compile Include="Service\ConfigReader.cs" />
+    <Compile Include="Service\GetWeatherFunction.cs" />
     <Compile Include="Service\Interface\IConfigReader.cs" />
+    <Compile Include="Service\Interface\IGetWeatherFunction.cs" />
     <Compile Include="Service\Interface\IStatePersister.cs" />
     <Compile Include="Service\Interface\IWeatherDataDownloader.cs" />
     <Compile Include="Service\Mock\ConfigReaderMock.cs" />
+    <Compile Include="Service\Mock\GetWeatherFunctionMock.cs" />
     <Compile Include="Service\Mock\StatePersisterMock.cs" />
     <Compile Include="Service\Mock\WeatherDataDownloaderMock.cs" />
     <Compile Include="Service\StatePersister.cs" />

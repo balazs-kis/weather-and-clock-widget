@@ -24,6 +24,7 @@ namespace WeatherAndClockWidget.ViewModel
             {
                 // Create design time view services and models
                 SimpleIoc.Default.Register<IStatePersister, StatePersisterMock>();
+                SimpleIoc.Default.Register<IGetWeatherFunction, GetWeatherFunctionMock>();
                 SimpleIoc.Default.Register<IWeatherDataDownloader, WeatherDataDownloaderMock>();
                 SimpleIoc.Default.Register<IConfigReader, ConfigReaderMock>();
             }
@@ -31,6 +32,7 @@ namespace WeatherAndClockWidget.ViewModel
             {
                 // Create run time view services and models
                 SimpleIoc.Default.Register<IStatePersister, StatePersister>();
+                SimpleIoc.Default.Register<IGetWeatherFunction, GetWeatherFunction>();
                 SimpleIoc.Default.Register<IWeatherDataDownloader, WeatherDataDownloader>();
                 SimpleIoc.Default.Register<IConfigReader, ConfigReader>();
             }
@@ -39,7 +41,7 @@ namespace WeatherAndClockWidget.ViewModel
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
-        
+
         public static void Cleanup()
         {
         }

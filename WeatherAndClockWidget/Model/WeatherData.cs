@@ -4,6 +4,8 @@ namespace WeatherAndClockWidget.Model
 {
     public class WeatherData
     {
+        public static WeatherData NoData => new WeatherData("0", "No data", "0", "0");
+
         public double Temperature { get; }
         public double Humidity { get; }
         public double Wind { get; }

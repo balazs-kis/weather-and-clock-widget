@@ -1,43 +1,26 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Net;
-using WeatherAndClockWidget.Model;
+﻿using WeatherAndClockWidget.Model;
 using WeatherAndClockWidget.Service.Interface;
 
 namespace WeatherAndClockWidget.Service
 {
     public class WeatherDataDownloader : IWeatherDataDownloader
     {
-        private const string LocationApiUrl = "https://freegeoip.net/json/";
-        private const string CoordinatesPlaceholder = "[coordinates]";
-        private readonly string _weatherApiUrl;
+        private const string LatitudePlaceholder = "[lat]";
+        private const string LongitudePlaceholder = "[lon]";
 
-        public WeatherDataDownloader(IConfigReader configReader)
+        private readonly string _locationApiUrl;
+        private readonly string _weatherApiUrl;
+        private readonly IGetWeatherFunction _getWeatherFunction;
+
+        public WeatherDataDownloader(IConfigReader configReader, IGetWeatherFunction getWeatherFunction)
         {
-            _weatherApiUrl = $"http://api.openweathermap.org/data/2.5/weather?{CoordinatesPlaceholder}&appid={configReader.WeatherApiKey}";
+            _locationApiUrl = "https://freegeoip.net/json/";
+            _weatherApiUrl = $"http://api.openweathermap.org/data/2.5/weather?lat=[lat]&lon=[lon]&appid={configReader.WeatherApiKey}";
+
+            _getWeatherFunction = getWeatherFunction;
         }
 
         public WeatherData GetCurrentWeather() =>
-            Disposable
-                .Using(CreateWebClient, client => client.DownloadString(LocationApiUrl))
-                .Map(JObject.Parse)
-                .Map(GetLocationFromJson)
-                .Map(location => _weatherApiUrl.Replace(CoordinatesPlaceholder, $"lat={location.Latitude:F4}&lon={location.Longitude:F4}"))
-                .Using(CreateWebClient, (client, uri) => client.DownloadString(uri))
-                .Map(JObject.Parse)
-                .Map(GetWeatherDataFromJson);
-
-        private static WebClient CreateWebClient() =>
-            new WebClient();
-
-        private static Location GetLocationFromJson(JObject o) =>
-            new Location(o["latitude"].ToString(), o["longitude"].ToString());
-
-        private static WeatherData GetWeatherDataFromJson(JObject o) =>
-            new WeatherData(
-                o["main"]["temp"].ToString(),
-                o["weather"][0]["main"].ToString(),
-                o["main"]["humidity"].ToString(),
-                o["wind"]["speed"].ToString());
+            _getWeatherFunction.GetCurrentWeather(_locationApiUrl, _weatherApiUrl, LatitudePlaceholder, LongitudePlaceholder);
     }
 }
