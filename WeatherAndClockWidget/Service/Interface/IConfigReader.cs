@@ -6,5 +6,6 @@ namespace WeatherAndClockWidget.Service.Interface
     {
         TimeSpan WeatherUpdatePeriod { get; }
         string WeatherApiKey { get; }
+        string LocationApiKey { get; }
     }
 }

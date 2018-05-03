@@ -14,7 +14,7 @@ namespace WeatherAndClockWidget.Service
 
         public WeatherDataDownloader(IConfigReader configReader, IGetWeatherFunction getWeatherFunction)
         {
-            _locationApiUrl = "https://freegeoip.net/json/";
+            _locationApiUrl = "http://api.ipstack.com/check?access_key={configReader.LocationApiKey}";
             _weatherApiUrl = $"http://api.openweathermap.org/data/2.5/weather?lat=[lat]&lon=[lon]&appid={configReader.WeatherApiKey}";
 
             _getWeatherFunction = getWeatherFunction;

@@ -9,6 +9,9 @@ namespace WeatherAndClockWidget.Service
         public string WeatherApiKey =>
             ConfigurationManager.AppSettings["WeatherApiKey"];
 
+        public string LocationApiKey =>
+            ConfigurationManager.AppSettings["LocationApiKey"];
+
         public TimeSpan WeatherUpdatePeriod =>
             ConfigurationManager
                 .AppSettings["WeatherUpdatePeriod"]
