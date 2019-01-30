@@ -11,6 +11,7 @@ using WeatherAndClockWidget.Message;
 using WeatherAndClockWidget.Model;
 using WeatherAndClockWidget.Service;
 using WeatherAndClockWidget.Service.Interface;
+using Timer = System.Timers.Timer;
 
 namespace WeatherAndClockWidget
 {
@@ -21,21 +22,27 @@ namespace WeatherAndClockWidget
     {
         private readonly TimeSpan _transitionTime;
         private readonly IStatePersister _statePersister;
+        private readonly Timer _timer;
 
         private MenuItem _lockMenuItem, _showMenuItem;
+        private State _savedState;
 
 
         public MainWindow()
         {
             _transitionTime = TimeSpan.FromMilliseconds(700);
             _statePersister = new StatePersister();
+            _timer = new Timer(5000) { AutoReset = true, Enabled = true };
 
-            var savedState = _statePersister.GetSavedState();
+            _savedState = _statePersister.GetSavedState();
 
-            SetInitialState(savedState);
-            CreateTrayIcon(savedState);
+            SetInitialState(_savedState);
+            CreateTrayIcon(_savedState);
 
             InitializeComponent();
+
+            _timer.Elapsed += MainWindow_RepositionIfNeeded;
+            _timer.Start();
         }
 
 
@@ -80,11 +87,40 @@ namespace WeatherAndClockWidget
             }
         }
 
+        private void MainWindow_RepositionIfNeeded(object sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                try
+                {
+                    if (_savedState.Left == Left && _savedState.Top == Top)
+                    {
+                        return;
+                    }
+
+                    var currentWidth = SystemParameters.VirtualScreenWidth;
+                    var currentHeight = SystemParameters.VirtualScreenHeight;
+
+                    if (_savedState.Left > currentWidth || _savedState.Top > currentHeight)
+                    {
+                        return;
+                    }
+
+                    Left = _savedState.Left;
+                    Top = _savedState.Top;
+                }
+                catch
+                {
+                    // Cannot read screen parameters; the next iteration will retry.
+                }
+            });
+        }
+
 
         private void SaveState()
         {
-            _statePersister.SaveState(
-                new State(_lockMenuItem.Checked, _showMenuItem.Checked, Left, Top));
+            _savedState = new State(_lockMenuItem.Checked, _showMenuItem.Checked, Left, Top);
+            _statePersister.SaveState(_savedState);
         }
 
 
