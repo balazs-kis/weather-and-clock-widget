@@ -17,6 +17,7 @@ namespace WeatherAndClockWidget.ViewModel
 
         private bool _isUnlocked;
         private DateTime _time;
+        private string _location;
         private double _temperature;
         private string _conditions;
         private double _windSpeed;
@@ -56,6 +57,15 @@ namespace WeatherAndClockWidget.ViewModel
             set
             {
                 _time = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Location {
+            get => _location;
+            set
+            {
+                _location = value;
                 RaisePropertyChanged();
             }
         }
@@ -123,6 +133,7 @@ namespace WeatherAndClockWidget.ViewModel
                     var wd = _downloader.GetCurrentWeather();
                     if (wd != null)
                     {
+                        Location = wd.LocationName;
                         Temperature = wd.Temperature;
                         Conditions = wd.Conditions;
                         WindSpeed = wd.Wind;

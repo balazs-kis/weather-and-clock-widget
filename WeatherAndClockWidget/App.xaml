@@ -8,12 +8,10 @@
     StartupUri="MainWindow.xaml"
     d1p1:Ignorable="d">
 
-  <Application.Resources>
-    <ResourceDictionary>
-      <vm:ViewModelLocator
-          x:Key="Locator"
-          d:IsDataSource="True"/>
-    </ResourceDictionary>
-  </Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+        </ResourceDictionary>
+    </Application.Resources>
 
 </Application>

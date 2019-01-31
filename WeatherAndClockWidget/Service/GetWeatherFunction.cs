@@ -26,6 +26,7 @@ namespace WeatherAndClockWidget.Service
 
         private static WeatherData GetWeatherDataFromJson(JObject o) =>
             new WeatherData(
+                o["name"].ToString(),
                 o["main"]["temp"].ToString(),
                 o["weather"][0]["main"].ToString(),
                 o["main"]["humidity"].ToString(),

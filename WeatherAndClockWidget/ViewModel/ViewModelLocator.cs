@@ -1,6 +1,6 @@
+using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 using WeatherAndClockWidget.Service;
 using WeatherAndClockWidget.Service.Interface;
 using WeatherAndClockWidget.Service.Mock;

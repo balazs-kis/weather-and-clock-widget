@@ -13,7 +13,7 @@ namespace WeatherAndClockWidget.Service.Mock
             var temp = (double) _random.Next(2800, 3000) / 10;
             var hum = (double)_random.Next(0, 1000) / 10;
             var wind = (double) _random.Next(0, 200) / 10;
-            return new WeatherData(temp.ToString("F1"), "Overcast", hum.ToString("F1"), wind.ToString("F1"));
+            return new WeatherData("Pest", temp.ToString("F1"), "Overcast", hum.ToString("F1"), wind.ToString("F1"));
         }
     }
 }

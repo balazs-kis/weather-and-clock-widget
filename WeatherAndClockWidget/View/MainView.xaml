@@ -17,15 +17,15 @@
         <Style TargetType="UserControl">
             <Setter Property="Background" Value="{Binding IsUnlocked, Converter={StaticResource BoolToBackgroundColor}}" />
             <Setter Property="Height" Value="200"></Setter>
-            <Setter Property="Width" Value="500"></Setter>
+            <Setter Property="Width" Value="520"></Setter>
         </Style>
     </UserControl.Style>
 
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="11*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
@@ -69,12 +69,31 @@
 
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="1.25*"/>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
+
             <TextBlock Grid.Row="0"
+                       VerticalAlignment="Top"
+                       Margin="0 3 0 0"
+                       HorizontalAlignment="Center"
+                       FontSize="22"
+                       Foreground="#e0e0e0"
+                       Text="{Binding Location}">
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                        ShadowDepth="2.5"
+                        Direction="330"
+                        Color="Black"
+                        Opacity="0.5"
+                        BlurRadius="3.5"/>
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock Grid.Row="1"
                        VerticalAlignment="Bottom"
                        HorizontalAlignment="Center"
                        FontSize="52"
@@ -90,7 +109,7 @@
                 </TextBlock.Effect>
             </TextBlock>
 
-            <TextBlock Grid.Row="1"
+            <TextBlock Grid.Row="2"
                        VerticalAlignment="Top"
                        HorizontalAlignment="Center"
                        FontSize="22"
@@ -106,7 +125,7 @@
                 </TextBlock.Effect>
             </TextBlock>
 
-            <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="3"
                        VerticalAlignment="Bottom"
                        HorizontalAlignment="Center"
                        FontSize="20"
@@ -122,7 +141,7 @@
                 </TextBlock.Effect>
             </TextBlock>
 
-            <TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="4"
                        VerticalAlignment="Top"
                        HorizontalAlignment="Center"
                        FontSize="20"
